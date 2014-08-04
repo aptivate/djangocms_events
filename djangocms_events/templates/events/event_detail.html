@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load cms_tags sekizai_tags %}
+{% load url from future %}
+
+{% block title %}{{ event.title }}{% endblock %}
+{% block extra_class %}{{ block.super }} details{% endblock %}
+ 
+{% block main %}
+    {% include "events/event_detail_main_fragment.html" %}
+{% endblock main %}

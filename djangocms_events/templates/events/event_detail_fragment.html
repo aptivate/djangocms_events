@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load url from future %}
+
+<article class="well event_list">
+	<header class="event_details_header">
+		<h2 class="resource_title"><a href="{% url "event_detail" event.id %}">{{ event.title }}</a></h2>
+		<p class="latest_meta ">
+			{{ event.start_date }}
+			{% if event.end_date and event.end_date != event.start_date %} - {{ event.end_date }}{% endif %} 
+			{% if event.location %} | {{ event.location }} {% endif %}
+		</p>
+		<div class="resource_thumbnail">
+			<div class="resource_default_icon Update">
+                <a href="{% url "event_detail" event.id %}"><span class="icon icon-event" aria-hidden="true"></span></a>
+			</div>
+		</div>
+	</header>
+	{% if event.description %}
+	<div class="resource summary">{{ event.description|truncatewords_html:30|safe }}
+		<a href="{% url "event_detail" event.id %}">{% trans "Read more..." %}</a>
+		</div>
+	{% endif %}
+	
+</article>

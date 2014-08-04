@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load cms_tags %}
+{% load url from future %}
+
+<section class="plugin plugin_events_summary">
+    <h2 class="latest_title">{{ title }}</h2>
+    
+    {% for event in events %}
+        <article class="latest_item event_item">
+	            <a href="{% url "event_detail" event.id %}"><span class="icon icon-event" aria-hidden="true"></span></a>
+	            <h3><a class="item_title" rel="bookmark" href="{% url "event_detail" event.id %}" class="update_title">{{ event.title }}</a></h3>
+	            <div class="latest_meta">
+	                <span class="event_date">{{ event.start_date|date:"DATE_FORMAT" }}</span>
+	                <span class="event_location"> {% if event.location %} | {{ event.location }} {% endif %}</span>
+	            </div>
+            <div class="item_body">
+		    	{% if event.description %}
+		    		{{ event.description|truncatewords_html:20|safe }}
+			    {% endif %}
+	    	</div>
+        </article>
+    {% empty %}
+        <p>{% trans "No Events Available" %}</p>
+    {% endfor %} 
+</section>

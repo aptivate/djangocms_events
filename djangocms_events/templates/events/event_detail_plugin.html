@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load cms_tags %}
+{% load url from future %}
+
+<section class="plugin plugin_events_detail">
+    <h2 class="latest_title">{{ title }}</h2>
+{% for event in events %}
+    {% include 'events/event_detail_fragment.html' %}
+{% empty %}
+    <p>{% trans "There are no events at this time." %}</p>
+{% endfor %}
+</section>

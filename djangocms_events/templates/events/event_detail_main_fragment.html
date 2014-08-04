@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load cms_tags sekizai_tags %}
+{% load url from future %}
+
+<header class="event_details_header">
+    <h1 class="title">{{ event.title }}</h1>
+    <div class="resource_thumbnail">
+        <div class="resource_default_icon Update">
+            <span class="icon icon-event" aria-hidden="true"></span>
+        </div>
+    </div>
+    <div class="keyinfo">
+        <p>{{ event.start_date }}
+            {% if event.end_date and event.start_date != event.end_date %} - {{ event.end_date }}{% endif %}
+            | {{ event.location }}
+        </p>
+    </div>
+</header>
+
+{% if event.description %}
+    <div class="resource summary detail">{{ event.description|safe }}</div>
+{% endif %}
+{% if event.additional_information %}
+    <h2>{% trans "Additional Information:" %}</h2>
+    <div class="resource summary detail additional">{{ event.additional_information|safe }}</div>
+{% endif %}
+
+<dl class="event meta">
+    {% if event.attendees %}
+        <dt>{% trans "Attendees:" %}</dt>
+        <dd>{{ event.attendees }}</dd>
+    {% endif %}
+    {% if event.contact_name %}
+        <dt>{% trans "Contact Name:" %}</dt>
+        <dd>{{ event.contact_name }}</dd>
+    {% endif %}
+    {% if event.contact_phone %}
+        <dt>{% trans "Contact Phone:" %}</dt>
+        <dd>{{ event.contact_phone }}</dd>
+    {% endif %}
+    {% if event.contact_email %}
+        <dt>{% trans "Contact Email:" %}</dt>
+        <dd>{{ event.contact_email }}</dd>
+    {% endif %}
+    {% if event.event_url %}
+        <dt>{% trans "Event Website:" %}</dt>
+        <dd>{{ event.event_url }}</dd>
+    {% endif %}
+    {% if event.categories.all %}
+        <dt class="event type label2">{% trans "Event types:" %}</dt>
+        <dd class="event type values">
+            {{ event.categories.all|join:", " }}
+        </dd>
+    {% endif %}
+</dl>

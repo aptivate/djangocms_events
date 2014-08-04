@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block main_section_title %}
+    <h1 class="title">{% trans "Event Search" %}</h1>
+{% endblock %}
+
+{% block main %}
+    {% include "events/search_fragment.html" %}
+{% endblock %}

@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load url from future %}
+<form method="get" action=".">
+<table><tbody>
+    {% if form.non_field_errors %}
+    <tr>
+        <th>{% trans "Errors" %}</th>
+        <td>
+            <ul class="errorlist">
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if form.q.errors %}
+        <tr><td colspan="2">{{ form.q.errors }}</td></tr>
+    {% endif %}
+
+    <tr>
+        <th>{{ form.q.label_tag }}:</th>
+        <td>{{ form.q }}</td>
+    </tr>
+
+    {% if form.category.errors %}
+        <tr><td colspan="2">{{ form.category.errors }}</td></tr>
+    {% endif %}
+
+    <tr>
+        <th>{{ form.category.label_tag }}:</th>
+        <td>{{ form.category }}</td>
+    </tr>
+
+    {% if form.from_month.errors %}
+        <tr><td colspan="2">{{ form.from_month.errors }}</td></tr>
+    {% endif %}
+
+    {% if form.from_year.errors %}
+        <tr><td colspan="2">{{ form.from_year.errors }}</td></tr>
+    {% endif %}
+
+    <tr>
+        <th><label>{% trans "From:" %}</label></th>
+        <td>{{ form.from_month }}{{ form.from_year }}</td>
+    </tr>
+
+    {% if form.to_month.errors %}
+        <tr><td colspan="2">{{ form.to_month.errors }}</td></tr>
+    {% endif %}
+
+    {% if form.to_year.errors %}
+        <tr><td colspan="2">{{ form.to_year.errors }}</td></tr>
+    {% endif %}
+
+    <tr>
+        <th><label>{% trans "To:" %}</label></th>
+        <td>{{ form.to_month }}{{ form.to_year }}</td>
+    </tr>
+
+    <tr>
+        <td>&nbsp;</td>
+        <td> <input type="submit" value="{% trans "Search" %}"> </td>
+    </tr>
+</tbody></table>
+</form>
+
+{% if form.is_valid_filter %}
+    <h3>{% trans "Results" %}</h3>
+
+    {% for result in page.object_list %}
+        {% include 'events/event_detail_fragment.html' with event=result.object %}
+    {% empty %}
+        <p>{% trans "No events found." %}</p>
+    {% endfor %}
+
+    {% if page.has_previous or page.has_next %}
+        <div>
+            {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; {% trans "Previous" %}{% if page.has_previous %}</a>{% endif %}
+            |
+            {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}{% trans "Next" %} &raquo;{% if page.has_next %}</a>{% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    {# Show some example queries to run, maybe query syntax, something else? #}
+{% endif %}

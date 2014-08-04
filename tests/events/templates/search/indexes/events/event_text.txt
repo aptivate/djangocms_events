@@ -1,0 +1,11 @@
+{{ object.title }}
+{{ object.description }}
+{{ object.additional_information }}
+{{ object.location }}
+{{ object.attendees }}
+{{ object.contact_name }}
+{{ object.contact_email }}
+{{ object.contact_phone }}
+{{ object.start_date|date:"Y-m-d" }}
+{{ object.end_date|date:"Y-m-d" }}
+{{ object.category.name }}

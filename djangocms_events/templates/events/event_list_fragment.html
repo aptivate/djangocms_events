@@ -1,0 +1,49 @@
+
+{% load i18n %}
+{% load cms_tags sekizai_tags %}
+{% load url from future %}
+
+{% for event in object_list %}
+    {% include 'events/event_detail_fragment.html' %}
+{% empty %}
+    <p>{% trans "There are no events at this time." %}</p>
+{% endfor %}
+
+{% if is_paginated %}
+    <div class="pagination">
+        <ul>
+        {% if page_obj.has_previous %}
+            <li><a href="?page=1">{% trans "First" %}</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+        {% else %}
+            <li class="disabled"><span>{% trans "First" %}</span></li>
+            <li class="disabled"><span>{% trans "Prev" %}</span></li>
+        {% endif %}
+        {% if not page_obj.has_next and page_obj.number >= 3 %}
+            <li><a href="?page={{ page_obj.number|add:"-2" }}">{{ page_obj.number|add:"-2"	}}</a></li>
+        {% endif %}
+        {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+        {% endif %}
+            <li class="active"><a href="#">{{ page_obj.number }}</a></li>
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+        {% endif %}
+        {% if not page_obj.has_previous and page_obj.paginator.num_pages >= 3 %}
+            <li><a href="?page={{ page_obj.number|add:"2" }}">{{ page_obj.number|add:"2"	}}</a></li>
+        {% endif %}
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            <li><a href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+        {% else %}
+            <li class="disabled"><span>{% trans "Next" %}</span></li>
+            <li class="disabled"><span>{% trans "Last" %}</span></li>
+        {% endif %}
+        </ul>
+    </div>
+    <span class="page-current">
+        {% blocktrans with page=page_obj.number pages=page_obj.paginator.num_pages %}
+        Page {{ page }} of {{ pages }}
+        {% endblocktrans %}
+    </span>
+{% endif %}
