@@ -8,10 +8,10 @@ from . import models
 
 class EventAdmin(ModelAdmin):
     list_display = ('__unicode__', 'location', 'start_date', 'end_date')
-    list_filter = ('start_date', 'end_date', 'categories')
+    list_filter = ('start_date', 'end_date')
     # form = TrainingActivitiesForm  # only link to activities
 
-    fields = ('title', 'description', 'additional_information', 'categories',
+    fields = ('title', 'description', 'additional_information',
         'location', 'attendees', 'event_url', 'contact_name', 'contact_email',
         'contact_phone', 'start_date', 'end_date',)
 
