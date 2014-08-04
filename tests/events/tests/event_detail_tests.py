@@ -1,7 +1,6 @@
 from __future__ import unicode_literals, absolute_import
 
 from django.core.urlresolvers import reverse
-from django.db import transaction
 from django.template.defaultfilters import date
 
 import cms.api
@@ -18,13 +17,12 @@ from ..models import Event
 class EventDetailsTests(FastDispatchMixin, CMSTestCase):
     def setUp(self):
         super(EventDetailsTests, self).setUp()
-        with transaction.atomic():
-            # needed for reverse lookups on pages to work properly
-            self.root_page = cms.api.create_page('Home', 'base.html', 'en', 
-                published=True)
-            self.events_page = cms.api.create_page('Events', 'base.html', 'en', 
-                reverse_id='events', slug='event', published=True)
-                # apphook='EventsApp')
+        # needed for reverse lookups on pages to work properly
+        self.root_page = cms.api.create_page('Home', 'base.html', 'en', 
+            published=True)
+        self.events_page = cms.api.create_page('Events', 'base.html', 'en', 
+            reverse_id='events', slug='event', published=True)
+            # apphook='EventsApp')
 
     def request_hook(self, request):
         super(EventDetailsTests, self).request_hook(request)
