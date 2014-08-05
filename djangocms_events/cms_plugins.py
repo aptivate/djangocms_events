@@ -10,8 +10,11 @@ from .models import EventPluginModel
 
 
 class EventFilterMixin(object):
+    def get_queryset(self, instance):
+        return settings.DJANGOCMS_EVENTS_MODEL.objects.all()
+
     def get_filtered_events(self, context, instance, placeholder):
-        events = settings.DJANGOCMS_EVENTS_MODEL.objects.all()
+        events = self.get_queryset(instance)
 
         from django.db.models import Q
         from datetime import date
@@ -31,29 +34,23 @@ class EventFilterMixin(object):
 
         return events.filter(query)[:instance.limit]
 
+    def render(self, context, instance, placeholder):
+        context["title"] = instance.title
+        context["events"] = self.get_filtered_events(context, instance,
+            placeholder)
+        return context
+
 
 class EventSummaryListPlugin(EventFilterMixin, CMSPluginBase):
     model = EventPluginModel
     name = _("Event Summary List")
     render_template = "events/event_summary_plugin.html"
 
-    def render(self, context, instance, placeholder):
-        context["title"] = instance.title
-        context["events"] = self.get_filtered_events(context, instance,
-            placeholder)
-        return context
-
 
 class EventDetailListPlugin(EventFilterMixin, CMSPluginBase):
     model = EventPluginModel
     name = _("Event Detail List")
     render_template = "events/event_detail_plugin.html"
-
-    def render(self, context, instance, placeholder):
-        context["title"] = instance.title
-        context["events"] = self.get_filtered_events(context, instance,
-            placeholder)
-        return context
 
 
 plugin_pool.register_plugin(EventSummaryListPlugin)
