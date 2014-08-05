@@ -3,5 +3,5 @@ from django.conf.urls import url, patterns, include
 import urls as base_urls
 
 urlpatterns = patterns('',
-    url(r'^events/', include('djangocms_events.urls')),
+    url(r'^djangocms_events_test_urls/', include('djangocms_events.urls')),
 ) + base_urls.urlpatterns
