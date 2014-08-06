@@ -5,7 +5,6 @@ from django_dynamic_fixture import G
 from django.test.utils import override_settings
 
 import cms.api
-from cms.signals import urls_need_reloading
 from cms.test_utils.testcases import CMSTestCase
 from django_harness.fast_dispatch import FastDispatchMixin
 
@@ -14,18 +13,31 @@ from ..models import Event
 
 
 # Fix URL cache not being cleared between tests
-@receiver(urls_need_reloading)
 def cms_app_urls_changed(**kwargs):
     # Clear the Django-CMS URL patterns and the root urlconf, which
     # have URLs from the apphook still attached to them, which will
     # break future tests.
-    from cms.views import invalidate_cms_page_cache
-    invalidate_cms_page_cache()
+
+    try:
+        from cms.views import invalidate_cms_page_cache
+        invalidate_cms_page_cache()
+    except ImportError as e:
+        # doesn't exist in DjangoCMS 2, so ignore this and hope it's not needed
+        pass
+
     clear_url_caches()
     import cms.urls
     reload(cms.urls)
     import urls
     reload(urls)
+
+try:
+    from cms.signals import urls_need_reloading
+    receiver(urls_need_reloading)(cms_app_urls_changed)
+except ImportError as e:
+    # doesn't exist in DjangoCMS 2, so ignore this. We'll call it manually
+    # when we need it anyway
+    pass
 
 
 # Do not override settings to change ROOT_URLCONF in this test!
