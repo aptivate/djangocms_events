@@ -10,11 +10,11 @@ from .models import EventPluginModel
 
 
 class EventFilterMixin(object):
-    def get_queryset(self, instance):
+    def get_event_queryset(self, instance):
         return settings.DJANGOCMS_EVENTS_MODEL.objects.all()
 
     def get_filtered_events(self, context, instance, placeholder):
-        events = self.get_queryset(instance)
+        events = self.get_event_queryset(instance)
 
         from django.db.models import Q
         from datetime import date
