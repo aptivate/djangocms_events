@@ -1,17 +1,25 @@
+from __future__ import absolute_import, unicode_literals
+
 from cms.test_utils.testcases import CMSTestCase
 import cms.api
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import date
-from django_dynamic_fixture import G
-from django.test.utils import override_settings
 
+from django_dynamic_fixture import G
+from django_harness.app_testing import AppTestMixin, cms_app_urls_changed
 from django_harness.fast_dispatch import FastDispatchMixin
 
 from .helper import create_event
 from ..models import Event
 
-@override_settings(ROOT_URLCONF="events.tests.test_urls")
+
 class EventListTests(FastDispatchMixin, CMSTestCase):
+    def setUp(self):
+        home_page = cms.api.create_page('Home', 'base.html', 'en', 
+            published=True)
+        events_page = cms.api.create_page('Events', 'base.html', 'en', 
+            published=True, slug="events", apphook='DjangoCmsEventsListApp')
+
     def create_event(self, **kwargs):
         return create_event(**kwargs)
 
